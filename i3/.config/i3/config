@@ -1,0 +1,242 @@
+###############
+# Base Config #
+###############
+workspace_auto_back_and_forth yes
+force_display_urgency_hint 500 ms
+font pango:DejaVu Sans Mono, Awesome 8
+
+##############
+# Workspaces #
+##############
+set $workspace1 "1: "
+set $workspace2 "2: "
+set $workspace3 "3: "
+set $workspace4 "4: "
+set $workspace5 "5: "
+set $workspace6 "6:  "
+set $workspace7 "7: "
+set $workspace8 "8: "
+set $workspace9 "9: "
+set $workspace10 "10: "
+
+# workspace default monitors
+workspace $workspace1 output VGA-0
+workspace $workspace2 output VGA-0
+workspace $workspace3 output VGA-0
+workspace $workspace4 output VGA-0
+workspace $workspace5 output VGA-0
+workspace $workspace6 output DVI-I-0
+workspace $workspace7 output DVI-I-0
+workspace $workspace8 output DVI-I-0
+workspace $workspace9 output DVI-I-0
+workspace $workspace10 output DVI-I-0
+
+# Application default workspaces
+assign [class="Google Play Music Desktop Player"] $workspace10
+assign [class="google-chrome"] $workspace9
+assign [title="Hangouts"] $workspace8
+for_window [title="Hangouts"] floating disabled
+assign [class="Empathy"] $workspace8
+assign [class="Thunderbird"] $workspace7
+assign [class="VirtualBox"] $workspace6
+#assign [class="Gedit"] $workspace5
+assign [class="SWT"] $workspace4
+assign [class="Thunar"] $workspace3
+assign [class="Nemo"] $workspace3
+assign [class="Nautilus"] $workspace3
+assign [class="File-roller"] $workspace3
+assign [class="Code"] $workspace2
+assign [window_role="popup"] move container to $workspace9
+
+##########
+# Visual #
+##########
+gaps inner 8
+smart_gaps on
+hide_edge_borders both
+
+# Colours
+set $active-bg-color     #b36b00
+set $bg-color            #2f343f
+set $inactive-bg-color   #2f343f
+set $text-color          #f3f4f5
+set $inactive-text-color #676E7D
+set $urgent-bg-color     #E53935
+
+# Window colours
+#                       border              background         text                 indicator
+client.focused          $active-bg-color            $active-bg-color         $text-color          $bg-color
+client.unfocused        $inactive-bg-color $inactive-bg-color $inactive-text-color  $bg-color
+client.focused_inactive $inactive-bg-color $inactive-bg-color $inactive-text-color  $bg-color
+client.urgent           $urgent-bg-color    $urgent-bg-color   $text-color          $bg-color
+
+# Bar
+bar {
+        status_command i3blocks -c /home/critchie/.config/i3/i3blocks.conf
+        position top
+        tray_output none #VGA-0
+        tray_padding 0
+        height 30
+        colors {
+                background $bg-color
+                separator #757575
+                #                  border             background         text
+                focused_workspace  $bg-color          $bg-color          $text-color
+                inactive_workspace $inactive-bg-color $inactive-bg-color $inactive-text-color
+                urgent_workspace   $urgent-bg-color   $urgent-bg-color   $text-color
+        }
+}
+
+###############
+# Application #
+###############
+exec_always --no-startup-id nitrogen --restore
+
+exec --no-startup-id nm-applet
+exec --no-startup-id compton -f --backend GLX --config "/home/critchie/.config/compton/compton.conf"
+exec --no-startup-id xautolock -time 5 -locker lock -notify 10 -notifier 'notify-send "Screen will lock in 10 seconds."'
+exec killall -q <notification daemon>
+exec --no-startup-id dunst -config /home/critchie/.config/dunst/dunstrc
+exec xinput --set-prop "Logitech M570" "Device Accel Constant Deceleration" 0.5
+
+
+################
+# Key bindings #
+################
+set $mod Mod4
+floating_modifier $mod
+
+# Start a terminal
+bindsym $mod+Return exec terminator
+
+# Lock
+bindsym Control+shift+l exec i3lock --color 475263
+
+# Rofi
+bindsym $mod+d exec --no-startup-id i3-dmenu-desktop --dmenu='rofi -dmenu -i -lines 10 -eh 2 -width 100 -height 100 -padding 200 -opacity "85" -bw 0 -bc "$bg-color" -bg "$bg-color" -fg "$text-color" -hlbg "$bg-color" -hlfg "#9575cd"'
+bindsym $mod+w exec --no-startup-id i3-dmenu-desktop --dmenu='rofi -show window -i -lines 10 -eh 2 -width 100 -height 100 -padding 200 -opacity "85" -bw 0 -bc "$bg-color" -bg "$bg-color" -fg "$text-color" -hlbg "$bg-color" -hlfg "#9575cd"'
+bindsym $mod+F2 exec --no-startup-id i3-dmenu-desktop --dmenu='rofi -show run -i -lines 10 -eh 2 -width 100 -height 100 -padding 200 -opacity "85" -bw 0 -bc "$bg-color" -bg "$bg-color" -fg "$text-color" -hlbg "$bg-color" -hlfg "#9575cd"'
+
+# Change focus
+bindsym $mod+j focus left
+bindsym $mod+k focus down
+bindsym $mod+l focus up
+bindsym $mod+semicolon focus right
+
+# Move focused window
+bindsym $mod+Shift+j move left
+bindsym $mod+Shift+k move down
+bindsym $mod+Shift+l move up
+bindsym $mod+Shift+semicolon move right
+
+# Split in horizontal orientation
+bindsym $mod+h split h
+
+# Split in vertical orientation
+bindsym $mod+v split v
+
+# Enter fullscreen
+bindsym $mod+f fullscreen toggle
+
+# Change container layout (stacked, tabbed, toggle split)
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+
+# Toggle tiling / floating
+bindsym $mod+Shift+space floating toggle
+
+# Change focus between tiling / floating windows
+bindsym $mod+space focus mode_toggle
+
+# Focus the parent container
+bindsym $mod+a focus parent
+
+# focus the child container
+#bindsym $mod+d focus child
+
+# switch to workspace
+bindsym $mod+1 workspace $workspace1
+bindsym $mod+2 workspace $workspace2
+bindsym $mod+3 workspace $workspace3
+bindsym $mod+4 workspace $workspace4
+bindsym $mod+5 workspace $workspace5
+bindsym $mod+6 workspace $workspace6
+bindsym $mod+7 workspace $workspace7
+bindsym $mod+8 workspace $workspace8
+bindsym $mod+9 workspace $workspace9
+bindsym $mod+0 workspace $workspace10
+
+# move focused container to workspacech
+bindsym $mod+Shift+1 move container to workspace $workspace1
+bindsym $mod+Shift+2 move container to workspace $workspace2
+bindsym $mod+Shift+3 move container to workspace $workspace3
+bindsym $mod+Shift+4 move container to workspace $workspace4
+bindsym $mod+Shift+5 move container to workspace $workspace5
+bindsym $mod+Shift+6 move container to workspace $workspace6
+bindsym $mod+Shift+7 move container to workspace $workspace7
+bindsym $mod+Shift+8 move container to workspace $workspace8
+bindsym $mod+Shift+9 move container to workspace $workspace9
+bindsym $mod+Shift+0 move container to workspace $workspace10
+
+# Move to workspace to monitor
+bindsym $mod+Shift+greater move workspace to output right
+bindsym $mod+Shift+less move workspace to output left
+
+# Kill focused window
+bindsym $mod+Shift+q kill
+
+# Reload the configuration file
+bindsym $mod+Shift+c reload
+
+# Restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
+bindsym $mod+Shift+r restart
+# Exit i3 (logs you out of your X session)
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
+
+# Resize window
+bindsym $mod+r mode "resize"
+mode "resize" {
+        # These bindings trigger as soon as you enter the resize mode
+
+        # Pressing left will shrink the window’s width.
+        # Pressing right will grow the window’s width.
+        # Pressing up will shrink the window’s height.
+        # Pressing down will grow the window’s height.
+        bindsym j resize shrink width 10 px or 10 ppt
+        bindsym k resize grow height 10 px or 10 ppt
+        bindsym l resize shrink height 10 px or 10 ppt
+        bindsym semicolon resize grow width 10 px or 10 ppt
+
+        # same bindings, but for the arrow keys
+        bindsym Left resize shrink width 10 px or 10 ppt
+        bindsym Down resize grow height 10 px or 10 ppt
+        bindsym Up resize shrink height 10 px or 10 ppt
+        bindsym Right resize grow width 10 px or 10 ppt
+
+        # back to normal: Enter or Escape
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+
+# Custom mode menus
+set $sysmenu "system:  [r]eload  [l]ogout  [p]oweroff  re[b]oot"
+bindsym Pause      mode $sysmenu
+
+bindsym $mod+shift+s sticky toggle
+
+mode $sysmenu {
+    bindsym r         restart
+    bindsym l         exit
+    bindsym p         exec shutdown -P now
+    bindsym b         exec shutdown -r now
+    bindsym Return    mode "default"
+    bindsym Escape    mode "default"
+}
+
+# Audio
+bindsym XF86AudioRaiseVolume exec --no-startup-id amixer -D pulse sset Master 5%+
+bindsym XF86AudioLowerVolume exec --no-startup-id amixer -D pulse sset Master 5%-
+bindsym XF86AudioMute exec --no-startup-id amixer set PCM toggle
+bindsym $mod+Shift+minus move scratchpad
+bindsym $mod+minus scratchpad show
